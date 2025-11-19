@@ -1,39 +1,47 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Recomendaciones</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="p-4">
-  <h3>Agregaste: {{ producto_actual.nombre }}</h3>
-  <h4>Recomendaciones basadas en el producto:</h4>
-  <div class="row">
-    {% for r in recomendaciones %}
-      <div class="col-md-3 mb-3">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{{ r.nombre }}</h5>
-            <p class="card-text">${{ r.precio }}</p>
-            <a href="{% url 'productos:detalle' r.id %}" class="btn btn-outline-primary btn-sm">Ver</a>
-          </div>
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <h3>Agregaste: {{ producto_actual.nombre }}</h3>
+
+    <h5>Carrito (actual)</h5>
+    <ul>
+        {% for c in cart %}
+            <li>{{ c.nombre }} - ${{ c.precio }}</li>
+        {% empty %}
+            <li>Carrito vacío</li>
+        {% endfor %}
+    </ul>
+
+    <h4 class="mt-4">Recomendaciones basadas en el producto:</h4>
+
+    <div class="row">
+        {% for r in recomendaciones %}
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                {% if r.imagen %}
+                <img src="{{ r.imagen.url }}" alt="{{ r.nombre }}" class="card-img-top"
+                     style="height:180px; object-fit:cover;">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ r.nombre }}</h5>
+                    <p class="card-text">${{ r.precio }}</p>
+                    <a href="{% url 'productos:detalle' r.id %}"
+                       class="btn btn-outline-primary btn-sm">Ver</a>
+                </div>
+            </div>
         </div>
-      </div>
-    {% empty %}
-      <p>No hay recomendaciones en este momento.</p>
-    {% endfor %}
-  </div>
+        {% empty %}
+        <p>No hay recomendaciones en este momento.</p>
+        {% endfor %}
+    </div>
 
-  <hr>
-  <h5>Carrito (actual)</h5>
-  <ul>
-    {% for c in cart %}
-      <li>{{ c.nombre }} - ${{ c.precio }}</li>
-    {% empty %}
-      <li>Carrito vacío</li>
-    {% endfor %}
-  </ul>
+    <hr>
 
-  <a href="{% url 'productos:lista' %}" class="btn btn-secondary">Seguir comprando</a>
-</body>
-</html>
+    <a href="{% url 'productos:lista' %}" class="btn btn-secondary">Seguir comprando</a>
+
+</div>
+
+{% endblock %}

@@ -1,41 +1,39 @@
-from collections import deque, defaultdict
+from collections import deque
 
 class GrafoProductos:
+
     def __init__(self):
-        self.adj = defaultdict(list)  # key = producto_id, value = list de producto_id
+        self.relaciones = {}
 
     def agregar_producto(self, producto_id):
-        _ = self.adj[producto_id]  # inicializa si no existe
+        if producto_id not in self.relaciones:
+            self.relaciones[producto_id] = []
 
-    def relacionar(self, id1, id2, peso=1):
-        if id2 not in [p for p,_ in self.adj[id1]]:
-            self.adj[id1].append((id2, peso))
-        if id1 not in [p for p,_ in self.adj[id2]]:
-            self.adj[id2].append((id1, peso))
-
-    def vecinos_directos(self, producto_id):
-        return [pid for pid, _ in self.adj.get(producto_id, [])]
+    def relacionar(self, p1, p2):
+        if p2 not in self.relaciones[p1]:
+            self.relaciones[p1].append(p2)
+        if p1 not in self.relaciones[p2]:
+            self.relaciones[p2].append(p1)
 
     def recomendar_nivel(self, producto_id, niveles=1):
-        """
-        Retorna recomendaciones hasta 'niveles' saltos.
-        Por defecto niveles=1 => solo vecinos directos.
-        """
-        if producto_id not in self.adj:
-            return []
+        """BFS: busca nodos vecinos hasta cierto nivel"""
+        visitado = set()
+        cola = deque([(producto_id, 0)])  # (id, nivel)
+        visitado.add(producto_id)
 
-        recomendados = []
-        visited = set([producto_id])
-        q = deque([(producto_id, 0)])
-        while q:
-            nodo, nivel = q.popleft()
-            if nivel >= niveles: 
+        resultados = []
+
+        while cola:
+            nodo, nivel = cola.popleft()
+
+            if nivel == niveles:
+                resultados.append(nodo)
                 continue
-            for vecino, _ in self.adj[nodo]:
-                if vecino not in visited:
-                    visited.add(vecino)
-                    recomendados.append((vecino, nivel+1))
-                    q.append((vecino, nivel+1))
-        # ordenamos por nivel (más cercanos primero)
-        recomendados.sort(key=lambda x: x[1])
-        return [pid for pid, _ in recomendados]
+
+            for vecino in self.relaciones.get(nodo, []):
+                if vecino not in visitado:
+                    visitado.add(vecino)
+                    cola.append((vecino, nivel + 1))
+
+        # Quitamos el nodo original si se coló en resultados
+        return [r for r in resultados if r != producto_id]

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Tienda - Productos{% endblock %}
+
+{% block content %}
+
+<div class="categorias mb-3">
+    <strong>Categorías:</strong>
+    {% for c in categorias %}
+        <a href="?categoria={{ c.id }}">{{ c.nombre }}</a> |
+    {% endfor %}
+</div>
+
+<div class="grid">
+    {% for p in productos %}
+    <div class="item">
+        {% if p.imagen %}
+        <img src="{{ p.imagen.url }}" alt="{{ p.nombre }}">
+        {% endif %}
+
+        <h3>{{ p.nombre }}</h3>
+        <p>${{ p.precio }}</p>
+
+        <a href="{% url 'productos:detalle' p.id %}" class="btn btn-outline-primary btn-sm">
+            Ver
+        </a>
+        
+        <a href="{% url 'productos:agregar_carrito' p.id %}" class="btn btn-outline-primary btn-sm">
+            Añadir al carrito
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
