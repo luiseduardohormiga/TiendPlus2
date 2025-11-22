@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Carrito{% endblock %}
+
+{% block content %}
+<h2>Tu carrito</h2>
+
+{% if productos %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Imagen</th>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in productos %}
+        <tr>
+            <td>
+                {% if p.imagen %}
+                <img src="/media/{{ p.imagen }}" alt="{{ p.nombre }}" style="width:80px; height:80px; object-fit:cover; border-radius:6px;">
+                {% endif %}
+            </td>
+            <td>{{ p.nombre }}</td>
+            <td>${{ p.precio|floatformat:0 }}</td>
+            <td>
+                <a href="{% url 'productos:detalle' p.id %}" class="btn btn-sm btn-outline-primary">Ver más</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'productos:vaciar_carrito' %}" class="btn btn-danger mt-3">Vaciar carrito</a>
+<a href="{% url 'productos:lista' %}" class="btn btn-secondary mt-3">Seguir comprando</a>
+
+{% else %}
+<p>No tienes productos en el carrito.</p>
+<a href="{% url 'productos:lista' %}" class="btn btn-primary">Ir al catálogo</a>
+{% endif %}
+{% endblock %}

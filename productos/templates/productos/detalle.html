@@ -1,47 +1,38 @@
 {% extends "base.html" %}
+{% block title %}{{ producto.nombre }}{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-
-    <div class="product-detail-card">
-
-        <div class="row">
-            
-            <!-- IMAGEN -->
-            <div class="col-md-6 text-center">
-                {% if producto.imagen %}
-                    <img src="{{ producto.imagen.url }}" class="product-detail-img">
-                {% endif %}
-            </div>
-
-            <!-- INFO -->
-            <div class="col-md-6">
-
-                <h2 class="product-title">{{ producto.nombre }}</h2>
-
-                <p class="product-price">${{ producto.precio }}</p>
-
-                <p class="product-desc">{{ producto.descripcion }}</p>
-
-                <div class="mt-4">
-                    <button class="btn btn-primary btn-lg w-100 mb-3" onclick="addToCart({{ producto.id }})">
-                        Añadir al carrito
-                    </button>
-
-                    <form action="{% url 'productos:agregar_carrito' producto.id %}" method="post">
-                        {% csrf_token %}
-                        <button class="btn btn-success w-100">Comprar ahora</button>
-                    </form>
-                </div>
-
-                <a href="{% url 'productos:lista' %}" class="btn btn-link mt-3 w-100">
-                    ⬅ Volver al catálogo
-                </a>
-            </div>
-
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            {% if producto.imagen %}
+            <img src="/media/{{ producto.imagen }}" alt="{{ producto.nombre }}" class="img-fluid rounded">
+            {% endif %}
         </div>
-
+        <div class="col-md-6">
+            <h2>{{ producto.nombre }}</h2>
+            <p><strong>Precio:</strong> ${{ producto.precio|floatformat:0 }}</p>
+            <p>{{ producto.descripcion }}</p>
+            <a href="{% url 'productos:add_to_cart' producto.id %}" class="btn btn-success">Añadir al carrito</a>
+            <a href="{% url 'productos:lista' %}" class="btn btn-secondary">Volver al catálogo</a>
+        </div>
     </div>
-
 </div>
+
+{% if recomendaciones %}
+<hr>
+<h3>También te puede interesar</h3>
+<div class="grid mt-3">
+    {% for r in recomendaciones %}
+    <div class="item">
+        {% if r.imagen %}
+        <img src="/media/{{ r.imagen }}" alt="{{ r.nombre }}" style="width:100%; height:200px; object-fit:cover; border-radius:8px;">
+        {% endif %}
+        <h4>{{ r.nombre }}</h4>
+        <p>${{ r.precio|floatformat:0 }}</p>
+        <a href="{% url 'productos:detalle' r.id %}" class="btn btn-outline-primary btn-sm">Ver más</a>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

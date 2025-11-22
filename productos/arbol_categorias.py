@@ -1,3 +1,5 @@
+# ARCHIVO: productos/arbol_categorias.py
+
 class NodoCategoria:
     def __init__(self, categoria):
         self.categoria = categoria
@@ -8,7 +10,7 @@ class ArbolCategorias:
         self.raiz = NodoCategoria(None)
 
     def insertar(self, categoria):
-        if getattr(categoria, 'padre', None) is None:
+        if categoria.padre is None:
             self.raiz.hijos.append(NodoCategoria(categoria))
         else:
             padre_nodo = self.buscar_nodo(self.raiz, categoria.padre)

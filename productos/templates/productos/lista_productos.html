@@ -1,35 +1,20 @@
-{% extends 'base.html' %}
-
-{% block title %}Tienda - Productos{% endblock %}
+{% extends "base.html" %}
+{% block title %}Tienda Online — Productos{% endblock %}
 
 {% block content %}
 
-<div class="categorias mb-3">
-    <strong>Categorías:</strong>
-    {% for c in categorias %}
-        <a href="?categoria={{ c.id }}">{{ c.nombre }}</a> |
-    {% endfor %}
-</div>
 
 <div class="grid">
     {% for p in productos %}
     <div class="item">
         {% if p.imagen %}
-        <img src="{{ p.imagen.url }}" alt="{{ p.nombre }}">
+        <img src="/media/{{ p.imagen }}" alt="{{ p.nombre }}" style="width:100%; height:200px; object-fit:cover; border-radius:8px;">
         {% endif %}
-
         <h3>{{ p.nombre }}</h3>
-        <p>${{ p.precio }}</p>
-
-        <a href="{% url 'productos:detalle' p.id %}" class="btn btn-outline-primary btn-sm">
-            Ver
-        </a>
-        
-        <a href="{% url 'productos:agregar_carrito' p.id %}" class="btn btn-outline-primary btn-sm">
-            Añadir al carrito
-        </a>
+        <p>${{ p.precio|floatformat:0 }}</p>
+        <a href="{% url 'productos:detalle' p.id %}" class="btn btn-outline-primary btn-sm">Ver más</a>
+        <a href="{% url 'productos:add_to_cart' p.id %}" class="btn btn-outline-success btn-sm">Añadir al carrito</a>
     </div>
     {% endfor %}
 </div>
-
 {% endblock %}

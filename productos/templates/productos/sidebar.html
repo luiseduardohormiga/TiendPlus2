@@ -1,0 +1,15 @@
+{% if cart %}
+    <h3 class="mb-3">🛒 Tu carrito</h3>
+    <ul class="list-group mb-3">
+        {% for producto in cart %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ producto.nombre }}
+            <span class="badge bg-success rounded-pill">${{ producto.precio }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'productos:ver_carrito' %}" class="btn btn-primary w-100 mb-2">Ver carrito completo</a>
+    <button class="btn btn-danger w-100" onclick="vaciarCarrito()">Vaciar carrito</button>
+{% else %}
+    <h5 class="text-muted">🛒 El carrito está vacío</h5>
+{% endif %}

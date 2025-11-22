@@ -1,7 +1,6 @@
 from collections import deque
 
 class GrafoProductos:
-
     def __init__(self):
         self.relaciones = {}
 
@@ -16,24 +15,19 @@ class GrafoProductos:
             self.relaciones[p2].append(p1)
 
     def recomendar_nivel(self, producto_id, niveles=1):
-        """BFS: busca nodos vecinos hasta cierto nivel"""
         visitado = set()
-        cola = deque([(producto_id, 0)])  # (id, nivel)
+        cola = deque([(producto_id, 0)])
         visitado.add(producto_id)
-
         resultados = []
 
         while cola:
             nodo, nivel = cola.popleft()
-
             if nivel == niveles:
                 resultados.append(nodo)
                 continue
-
             for vecino in self.relaciones.get(nodo, []):
                 if vecino not in visitado:
                     visitado.add(vecino)
                     cola.append((vecino, nivel + 1))
 
-        # Quitamos el nodo original si se coló en resultados
         return [r for r in resultados if r != producto_id]

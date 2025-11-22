@@ -4,43 +4,51 @@
 
 <div class="container py-4">
 
-    <h3>Agregaste: {{ producto_actual.nombre }}</h3>
+    <h3 class="mb-3">✅ Agregaste: <strong>{{ producto_actual.nombre }}</strong></h3>
 
-    <h5>Carrito (actual)</h5>
-    <ul>
-        {% for c in cart %}
-            <li>{{ c.nombre }} - ${{ c.precio }}</li>
-        {% empty %}
-            <li>Carrito vacío</li>
-        {% endfor %}
-    </ul>
+    <div class="mb-4">
+        <h5>🛒 Carrito actual:</h5>
+        <ul class="list-group">
+            {% for c in cart %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ c.nombre }}
+                    <span class="badge bg-primary rounded-pill">${{ c.precio }}</span>
+                </li>
+            {% empty %}
+                <li class="list-group-item">Carrito vacío</li>
+            {% endfor %}
+        </ul>
+    </div>
 
-    <h4 class="mt-4">Recomendaciones basadas en el producto:</h4>
+    <h4 class="mt-4 mb-3">🎯 Recomendaciones basadas en este producto:</h4>
 
     <div class="row">
         {% for r in recomendaciones %}
-        <div class="col-md-3 mb-3">
-            <div class="card">
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 shadow-sm">
                 {% if r.imagen %}
                 <img src="{{ r.imagen.url }}" alt="{{ r.nombre }}" class="card-img-top"
                      style="height:180px; object-fit:cover;">
                 {% endif %}
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ r.nombre }}</h5>
-                    <p class="card-text">${{ r.precio }}</p>
-                    <a href="{% url 'productos:detalle' r.id %}"
-                       class="btn btn-outline-primary btn-sm">Ver</a>
+                    <p class="card-text fw-bold text-success">${{ r.precio }}</p>
+                    <a href="{% url 'productos:detalle' r.id %}" class="btn btn-outline-primary btn-sm mt-auto">
+                        Ver producto
+                    </a>
                 </div>
             </div>
         </div>
         {% empty %}
-        <p>No hay recomendaciones en este momento.</p>
+        <div class="col-12">
+            <p>No hay recomendaciones en este momento.</p>
+        </div>
         {% endfor %}
     </div>
 
-    <hr>
+    <hr class="my-4">
 
-    <a href="{% url 'productos:lista' %}" class="btn btn-secondary">Seguir comprando</a>
+    <a href="{% url 'productos:lista' %}" class="btn btn-secondary">⬅ Seguir comprando</a>
 
 </div>
 

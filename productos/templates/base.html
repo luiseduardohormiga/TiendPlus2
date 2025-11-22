@@ -4,432 +4,226 @@
     <meta charset="UTF-8">
     <title>{% block title %}Tienda Online{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
+    {% load static %}
 
-    /* CATEGORÍAS */
-    .categorias {
-        background: #f5f5f5;
-        padding: 12px 15px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-        border: 1px solid #e1e1e1;
-    }
+    <style>
+        /* NAVBAR */
+        .meli-navbar {
+            background: #281387ff;
+            padding: 25px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e1e1e1;
+            margin-bottom: 20px;
+        }
+        .meli-brand {
+            font-size: 26px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .meli-links a {
+            margin-left: 15px;
+            font-weight: 600;
+            color: #fff;
+            text-decoration: none;
+        }
+        .meli-links a:hover {
+            text-decoration: underline;
+        }
 
-    .categorias strong {
-        font-size: 15px;
-        color: #333;
-        margin-right: 5px;
-    }
+        /* GRID DE PRODUCTOS */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 18px;
+        }
+        .grid .item {
+            background: white;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+            text-align: center;
+            transition: 0.2s ease;
+            border: 1px solid transparent;
+        }
+        .grid .item:hover {
+            transform: translateY(-4px);
+            border-color: #281387ff;
+        }
+        .grid .item h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        .grid .item p {
+            font-size: 16px;
+            color: #444;
+        }
 
-    /* Links estilo ML */
-    .categorias a {
-        background: white;
-        padding: 6px 12px;
-        border-radius: 20px;
-        border: 1px solid #dcdcdc;
-        font-size: 14px;
-        color: #333;
-        text-decoration: none;
-        transition: 0.2s ease;
-    }
+        /* FOOTER */
+        .footer-meli {
+            background: #f3f3f3;
+            padding: 40px 0 10px;
+            margin-top: 40px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer-container {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+        .footer-col h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-col ul li {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #444;
+        }
+        .footer-col ul li a {
+            color: #3483fa;
+            text-decoration: none;
+        }
+        .footer-col ul li a:hover {
+            text-decoration: underline;
+        }
+        .footer-bottom {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #dcdcdc;
+            font-size: 13px;
+            color: #777;
+        }
+        html, body {
+    height: 100%;
+    margin: 0;
+    
+}
 
-    .categorias a:hover {
-        border-color: #281387ff;
-        background-color: #fffceb;
-    }
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-    /* QUITAR EL | SEPARADOR (ya no se usa) */
-    .categorias a + a::before {
-        content: "";
-        margin: 0;
-    }
+.container {
+    flex: 1; /* el contenido ocupa el espacio disponible */
+}
 
-    /* Estado destacado (si quieres marcar categoría seleccionada) */
-    .categoria-activa {
-        background: #281387ff !important;
-        border-color: #2020c9ff !important;
-        font-weight: 600;
-    }
+.footer-meli {
+    flex-shrink: 0; /* el footer se queda abajo */
+}
+.meli-search {
+    flex: 1;
+    margin: 0 20px;
+}
 
-</style>
+.meli-search input {
+    max-width: 800px; /* ajusta el ancho máximo */
+    border-radius: 6px;
+}
 
-<style>
-    .meli-navbar {
-        background: #281387ff;
-        padding: 12px 0;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid #e1e1e1;
-        margin-bottom: 20px;
-    }
+.meli-search button {
+    border-radius: 6px;
+    font-weight: 600;
+}
+.meli-search {
+    flex: 1;                /* ocupa todo el espacio disponible */
+    max-width: 1000px;       /* ancho máximo más grande */
+    margin: 0 40px;         /* separación lateral */
+}
 
-    .meli-brand {
-        font-size: 26px;
-        font-weight: bold;
-        color: #999;
-    }
+.meli-search input {
+    height: 68px;           /* más alto */
+    font-size: 18px;        /* texto más grande */
+    padding: 10px 14px;
+    border-radius: 6px;
+}
 
-    .meli-search {
-        width: 45%;
-    }
+.meli-search button {
+    height: 68px;           /* igual altura que el input */
+    font-size: 16px;
+    padding: 0 20px;
+    border-radius: 6px;
+}
 
-    .meli-search input {
-        width: 100%;
-        padding: 10px 14px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-    }
 
-    .meli-links a {
-        margin-left: 15px;
-        font-weight: 600;
-        color: #999;
-        text-decoration: none;
-    }
 
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-        gap: 18px;
-    }
 
-    .grid .item {
-        background: white;
-        border-radius: 10px;
-        padding: 14px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.07);
-        text-align: center;
-        transition: 0.2s ease;
-        border: 1px solid transparent;
-    }
+    </style>
+    
+</head>
+<body>
+    <!-- NAVBAR -->
+   <nav class="meli-navbar px-4">
+    <div class="meli-brand">
+    <a href="/" style="color:#fff; text-decoration:none;">MiTienda</a>
+</div>
 
-    .grid .item:hover {
-        transform: translateY(-4px);
-        border-color: #281387ff;
-    }
 
-    .grid .item img {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-        border-radius: 6px;
-    }
-
-    .grid .item h3 {
-        font-size: 17px;
-        font-weight: 600;
-        margin: 10px 0;
-    }
-
-    .grid .item p {
-        font-size: 20px;
-        font-weight: bold;
-        color: #696868ff;
-    }
-
-    .product-detail-card {
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
-
-    .product-detail-price {
-        font-size: 32px;
-        font-weight: bold;
-        color: #00a650;
-    }
-
-    .product-detail-img {
-        width: 380px;
-        border-radius: 10px;
-        object-fit: cover;
-    }
-
-    #cartSidebar {
-        background: white;
-        padding: 20px;
-        border-left: 2px solid #e1e1e1;
-    }
-
-    #cartSidebar h3 {
-        font-weight: 700;
-    }
-
-    #cartSidebar .list-group-item {
-        border: none;
-        padding: 10px 0;
-        font-size: 15px;
-    }
-
-    #cartSidebar button {
-        border-radius: 8px;
-    }
-
-    .toast-alert {
-        position: fixed;
-        bottom: 20px;
-        right: -300px;
-        background: #3483fa;
-        color: white;
-        padding: 14px 22px;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        transition: right .3s ease;
-        font-size: 16px;
-        font-weight: 600;
-        z-index: 2000;
-    }
-
-    .toast-alert.show {
-        right: 20px;
-    }
-
-</style>
-<style>
-    .product-detail-card {
-        background: white;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
-    .product-detail-img {
-        width: 420px;
-        height: 420px;
-        object-fit: contain;
-        background: #f5f5f5;
-        padding: 20px;
-        border-radius: 10px;
-        border: 1px solid #e6e6e6;
-    }
-    .product-title {
-        font-size: 24px;
-        font-weight: 600;
-        margin-bottom: 5px;
-    }
-    .product-price {
-        font-size: 36px;
-        font-weight: bold;
-        color: #00a650;
-        margin: 15px 0;
-    }
-    .product-desc {
-        font-size: 15px;
-        color: #666;
-        margin-bottom: 20px;
-    }
-    .btn-primary {
-        background: #3483fa !important;
-        border: none !important;
-        font-size: 18px;
-        padding: 12px 0;
-    }
-
-    .btn-primary:hover {
-        background: #2968c8 !important;
-    }
-    .btn-success {
-        background: #00a650 !important;
-        border: none !important;
-        padding: 12px 0;
-        font-size: 18px;
-    }
-
-    .btn-success:hover {
-        background: #008f45 !important;
-    }
-    .btn-link {
-        font-size: 16px;
-        color: #3483fa !important;
-        text-decoration: none;
-    }
-
-    .btn-link:hover {
-        text-decoration: underline;
-    }
-
-</style>
-<style>
-    .footer-meli {
-        background: #f3f3f3;
-        padding: 40px 0 10px;
-        margin-top: 40px;
-        border-top: 1px solid #e0e0e0;
-    }
-
-    .footer-container {
-        max-width: 1200px;
-        margin: auto;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 30px;
-        padding: 0 20px;
-    }
-
-    .footer-col h4 {
-        font-size: 18px;
-        font-weight: 700;
-        margin-bottom: 15px;
-    }
-
-    .footer-col p {
-        color: #555;
-        font-size: 14px;
-    }
-
-    .footer-col ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .footer-col ul li {
-        margin-bottom: 8px;
-        font-size: 14px;
-        color: #444;
-    }
-
-    .footer-col ul li a {
-        color: #3483fa;
-        text-decoration: none;
-    }
-
-    .footer-col ul li a:hover {
-        text-decoration: underline;
-    }
-
-    .footer-bottom {
-        text-align: center;
-        margin-top: 25px;
-        padding-top: 15px;
-        border-top: 1px solid #dcdcdc;
-        font-size: 13px;
-        color: #777;
-    }
-</style>
-
-<nav class="meli-navbar px-4">
-    <div class="meli-brand">MiTienda</div>
-
-    <div class="meli-search">
-        <input type="text" placeholder="Buscar productos...">
-    </div>
+    <!-- BUSCADOR CENTRADO -->
+    <form method="get" action="/" class="meli-search d-flex mx-auto">
+        <input type="text" name="q" placeholder="Buscar productos..." value="{{ q }}" class="form-control me-2">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
 
     <div class="meli-links">
         <a href="/">Inicio</a>
-        <a href="#" onclick="toggleCart(true)">Carrito 🛒</a>
+        <a href="{% url 'productos:ver_carrito' %}">Carrito 🛒</a>
     </div>
 </nav>
-</head>
-<body>
+
+
+
+    <!-- CONTENIDO -->
     <div class="container mt-4">
         {% block content %}
         {% endblock %}
     </div>
 
-    <script>
-        function toggleCart(open=true) {
-            const sidebar = document.getElementById("cartSidebar");
-            const overlay = document.getElementById("cartOverlay");
-
-            if (open) {
-                sidebar.classList.add("open");
-                overlay.classList.add("show");
-            } else {
-                sidebar.classList.remove("open");
-                overlay.classList.remove("show");
-            }
-        }
-
-        function showToast(message) {
-            let toast = document.createElement("div");
-            toast.className = "toast-alert";
-            toast.textContent = message;
-
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.add("show");
-            }, 50);
-
-            setTimeout(() => {
-                toast.classList.remove("show");
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        function addToCart(productId) {
-            fetch(`/producto/${productId}/add/ajax/`)
-                .then(response => response.json())
-                .then(data => {
-                    showToast(data.message);
-
-                    document.getElementById("cartSidebar").innerHTML = data.sidebar_html;
-
-                    toggleCart(true);
-                })
-                .catch(error => console.error("Error en AJAX:", error));
-        }
-    </script>
-
-<style>
-    .toast-alert {
-        position: fixed;
-        bottom: 20px;
-        right: -300px;
-        padding: 12px 20px;
-        background: #28a745;
-        color: white;
-        border-radius: 8px;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-        transition: right 0.3s ease;
-        z-index: 2000;
-    }
-    .toast-alert.show {
-        right: 20px;
-    }
-</style>
-<br><br><br>
-</body> 
-<footer class="footer-meli mt-5">
-
-    <div class="footer-container">
-        <div class="footer-col">
-            <h4>MiTienda</h4>
-            <p>Proyecto utilizando: Listas, Arboles y Grafos</p>
+    <!-- FOOTER -->
+    <footer class="footer-meli mt-5">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h4>MiTienda</h4>
+                <p>Proyecto utilizando: Listas, Árboles y Grafos</p>
+            </div>
+            <div class="footer-col">
+                <h4>Integrantes</h4>
+                <ul>
+                    <li>Angela Gabriela Cruz Anacona</li>
+                    <li>Luis Eduardo Hurtado Hormiga</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Información del Proyecto</h4>
+                <ul>
+                    <li><a href="https://github.com/luiseduardohormiga/TiendPlus2.git" target="_blank">Repositorio</a></li>
+                    <li><a href="#">Documentación</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="#">Correo: proyecto@mitienda.com</a></li>
+                    <li><a href="#">Correo: programadores@mitienda.com</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="footer-col">
-            <h4>Integrantes</h4>
-            <ul>
-                <li>Angela Gabriela Cruz Anacona</li>
-                <li>Luis Eduardo Hurtado Hormiga</li>
-            </ul>
+        <div class="footer-bottom">
+            © 2025 MiTienda — Proyecto académico. Todos los derechos reservados.
         </div>
-        <div class="footer-col">
-            <h4>Información del Proyecto</h4>
-            <ul>
-                <li><a href="#">Repositorio</a></li>
-                <li><a href="#">Documentación</a></li>
-            </ul>
-        </div>
-
-        <!-- Columna 4 - Redes -->
-        <div class="footer-col">
-            <h4>Contacto</h4>
-            <ul>
-                <li><a href="#">Correo: proyecto@mitienda.com</a></li>
-                <li><a href="#">Correo: programadores@mitienda.com</a></li>
-            </ul>
-        </div>
-
-    </div>
-
-    <div class="footer-bottom">
-        © 2025 MiTienda — Proyecto académico. Todos los derechos reservados.
-    </div>
-
-</footer>
+    </footer>
+</body>
 </html>
